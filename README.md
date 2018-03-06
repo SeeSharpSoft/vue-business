@@ -38,6 +38,7 @@
 - MessageToast (??)
 - Menu (??)
 - SidePanel (??)
+- Charts
 
 ## Layout
 
