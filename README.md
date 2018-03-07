@@ -5,6 +5,8 @@
 - unified
 - exchangable
 
+- link to icomoon (or create own icons?)
+
 ## Theming
 
 - unified
