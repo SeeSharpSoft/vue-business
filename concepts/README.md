@@ -1,6 +1,6 @@
 # Vibe - Concepts
 
-## [Icons](icons/README.MD)
+## [Icons](icons/README.md)
 
 - unified
 - exchangable
@@ -13,7 +13,7 @@
 - unified
 - exchangable
 
-## [Localization](localization/README.MD)
+## [Localization](localization/README.md)
 
 - supported
 - use of common standards (i18n)
