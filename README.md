@@ -2,4 +2,4 @@
 
 ## Concepts
 
-[Collection of Ideas, Requirements and Concepts](concepts/README.MD)
+[Collection of Ideas, Requirements and Concepts](concepts/README.md)
