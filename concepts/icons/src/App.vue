@@ -2,9 +2,7 @@
   <div id="app">
     <img src="./assets/logo.png">
     <h1>{{ msg }}</h1>
-	 <svg class="svg-icon">
-		<use xlink:href="#icon-001-home"></use>
-	  </svg>
+	  <vibe-icon icon="001-home" :visible="true"/>
     <h2>Essential Links</h2>
     <ul>
       <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
@@ -23,12 +21,18 @@
 </template>
 
 <script>
+import VibeIcon from './vibe/components/VibeIcon'
+
 export default {
   name: 'app',
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
+  },
+  components:
+  {
+    VibeIcon
   }
 }
 </script>
