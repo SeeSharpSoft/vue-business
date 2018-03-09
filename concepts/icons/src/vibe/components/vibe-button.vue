@@ -1,0 +1,72 @@
+<template>
+    <button class="vibe-button" :title="tooltip">
+        <vibe-icon v-if="iconFirst && icon" :icon="icon" :tooltip="tooltip || text"/>
+        <span class="vibe-text">{{ text }}</span>
+        <vibe-icon v-if="!iconFirst && icon" :icon="icon" :tooltip="tooltip || text"/>
+    </button>
+</template>
+
+<script>
+import VibeComponent from '@/vibe/components/vibe-component'
+import VibeIcon from '@/vibe/components/vibe-icon'
+import interactable from '@/vibe/mixins/interactable.js'
+import hideable from '@/vibe/mixins/hideable.js'
+import { setStyleClass, setAttribute} from '../util.js'
+
+export default {
+    name: 'vibe-button',
+    extends: VibeComponent,
+    mixins: [hideable,interactable],
+    components: { VibeIcon },
+    props: {
+        icon: {
+            type: String
+        }, 
+        text: {
+            type: String
+        },
+        iconFirst: {
+            type: Boolean,
+            default: true
+        }
+    },
+    watch: {
+        enabled() {
+            setAttribute(this.$el, 'disabled', !this.enabled ? '' : null)
+        }
+    }
+}
+</script>
+
+<style>
+.vibe-button {
+    background: whitesmoke;
+
+    border-radius: 3px;
+
+    padding: 0.5rem;
+
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+
+    box-sizing: border-box;
+
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.vibe-button:not(.vibe-interactable-disabled):hover {
+    background: lightgray;
+}
+
+.vibe-button > .vibe-text {
+   margin: 0 0.5rem;
+}
+
+.vibe-button > .vibe-icon {
+   width: 1rem;
+   height: 1rem;
+}
+
+</style>
