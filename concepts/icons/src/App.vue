@@ -2,7 +2,10 @@
   <div id="app">
     <img src="./assets/logo.png">
     <h1>{{ msg }}</h1>
-	  <vibe-icon icon="001-home" :visible="true"/>
+	  <vibe-icon  @click.native="onEnableDisable" icon="001-home" tooltip="Testerossa" :color="enabled ? 'blue' : 'red'" :hidden="hidden"/>
+    <vibe-button @click="onEnableDisable" icon="006-pencil" tooltip="Enable/Disable" :enabled="!hidden">Enable/Disable</vibe-button>
+    <vibe-button @click="onShowHide" icon="008-quill" :iconFirst="false">Show/Hide</vibe-button>
+
     <h2>Essential Links</h2>
     <ul>
       <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
@@ -21,18 +24,30 @@
 </template>
 
 <script>
-import VibeIcon from './vibe/components/VibeIcon'
+import VibeIcon from './vibe/components/vibe-icon'
+import VibeButton from './vibe/components/vibe-button'
 
 export default {
   name: 'app',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      enabled: true,
+      hidden: false
+    }
+  },
+  methods: {
+    onEnableDisable(oEvent) {
+      console.log(oEvent)
+      this.enabled = !this.enabled
+    },
+    onShowHide() {
+      this.hidden = !this.hidden
     }
   },
   components:
   {
-    VibeIcon
+    VibeIcon, VibeButton
   }
 }
 </script>
