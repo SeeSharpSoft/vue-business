@@ -7,12 +7,12 @@
 
 <script>
 import VibeComponent from '@/vibe/components/vibe-component'
-import hideable from '@/vibe/mixins/hideable.js'
+import Hideable from '@/vibe/mixins/hideable.js'
 
 export default {
     name: 'vibe-icon',
     extends: VibeComponent,
-    mixins: [hideable],
+    mixins: [Hideable],
     props: {
         icon: {
             type: String

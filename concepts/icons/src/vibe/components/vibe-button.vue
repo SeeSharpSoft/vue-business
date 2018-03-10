@@ -1,5 +1,5 @@
 <template>
-    <button class="vibe-button" :title="tooltip">
+    <button class="vibe-button" :title="tooltip" @click="onClick">
         <vibe-icon v-if="iconFirst && icon" :icon="icon" :tooltip="tooltip"/>
         <span class="vibe-text"><slot/></span>
         <vibe-icon v-if="!iconFirst && icon" :icon="icon" :tooltip="tooltip"/>
@@ -9,14 +9,14 @@
 <script>
 import VibeComponent from '@/vibe/components/vibe-component'
 import VibeIcon from '@/vibe/components/vibe-icon'
-import interactable from '@/vibe/mixins/interactable.js'
-import hideable from '@/vibe/mixins/hideable.js'
+import Clickable from '@/vibe/mixins/clickable.js'
+import Hideable from '@/vibe/mixins/hideable.js'
 import { setStyleClass, setAttribute} from '../util.js'
 
 export default {
     name: 'vibe-button',
     extends: VibeComponent,
-    mixins: [hideable,interactable],
+    mixins: [Hideable, Clickable],
     components: { VibeIcon },
     props: {
         icon: {
