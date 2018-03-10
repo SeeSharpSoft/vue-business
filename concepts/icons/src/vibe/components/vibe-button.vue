@@ -1,8 +1,8 @@
 <template>
     <button class="vibe-button" :title="tooltip">
-        <vibe-icon v-if="iconFirst && icon" :icon="icon" :tooltip="tooltip || text"/>
-        <span class="vibe-text">{{ text }}</span>
-        <vibe-icon v-if="!iconFirst && icon" :icon="icon" :tooltip="tooltip || text"/>
+        <vibe-icon v-if="iconFirst && icon" :icon="icon" :tooltip="tooltip"/>
+        <span class="vibe-text"><slot/></span>
+        <vibe-icon v-if="!iconFirst && icon" :icon="icon" :tooltip="tooltip"/>
     </button>
 </template>
 
@@ -22,9 +22,6 @@ export default {
         icon: {
             type: String
         }, 
-        text: {
-            type: String
-        },
         iconFirst: {
             type: Boolean,
             default: true

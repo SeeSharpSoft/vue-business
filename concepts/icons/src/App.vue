@@ -3,8 +3,8 @@
     <img src="./assets/logo.png">
     <h1>{{ msg }}</h1>
 	  <vibe-icon  @click.native="onEnableDisable" icon="001-home" tooltip="Testerossa" :color="enabled ? 'blue' : 'red'" :hidden="hidden"/>
-    <vibe-button @click.native="onEnableDisable" icon="006-pencil" text="Enable/Disable" :enabled="!hidden"></vibe-button>
-    <vibe-button @click.native="onShowHide" icon="008-quill" :iconFirst="false" text="Show/Hide"></vibe-button>
+    <vibe-button @click.native="onEnableDisable" icon="006-pencil" tooltip="Enable/Disable" :enabled="!hidden">Enable/Disable</vibe-button>
+    <vibe-button @click.native="onShowHide" icon="008-quill" :iconFirst="false">Show/Hide</vibe-button>
 
     <h2>Essential Links</h2>
     <ul>
