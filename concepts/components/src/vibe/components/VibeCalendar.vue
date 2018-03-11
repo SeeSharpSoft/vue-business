@@ -10,8 +10,13 @@
                     :key="index"
                     :data-out="!!day.outOfBounds"
                     :data-today="!!day.today"
-                    :data-selected="!!day.selected"
+                    :data-selected="isSelected(day)"
                     @click="selectDate(day)"
+                    tabindex="0"
+                    @keydown.left="setFocus($event, -1, 0)"
+                    @keydown.right="setFocus($event, 1, 0)"
+                    @keydown.up="setFocus($event, 0, -1)"
+                    @keydown.down="setFocus($event, 0, 1)"
                 >{{ day.moment.date() }}</li>
             </ul>
         </div>
@@ -50,6 +55,35 @@ export default {
 
         selectDate(day) {
             this.selectedDate = day.moment
+
+            this.$emit('select', day.moment)
+        },
+
+        setFocus(current, x, y) {
+            console.log(current)
+            if (x < 0) {
+
+            }
+
+            if (x > 0) {
+
+            }
+
+            if (y < 0) {
+
+            }
+
+            if (y > 0) {
+
+            }
+        },
+
+        isSelected(day) {
+            if (!this.selectedDate) {
+                return false
+            }
+
+            return this._isSameDay(this.selectedDate, day.moment)
         },
 
         _addPlaceholder(aDays, oMoment) {
@@ -57,6 +91,14 @@ export default {
                 outOfBounds: true,
                 moment: oMoment
             })
+        },
+
+        _isSameDay(moment1, moment2) {
+            return (
+                moment1.year() === moment2.year() &&
+                moment1.month() === moment2.month() &&
+                moment1.date() === moment2.date()
+            )
         }
     },
 
@@ -80,10 +122,10 @@ export default {
             }
 
             // do not calc days difference. Might lead to problem with summertime
-            while (this.lastDayOfVisibleMonth.diff(current, 'hours') >= 12) {
+            while (!this._isSameDay(current, this.lastDayOfVisibleMonth)) {
                 aDays.push({
                     moment: current,
-                    today: current.diff(this.today, 'hours') > -24 && current.diff(this.today, 'hours') < 0
+                    today: this._isSameDay(this.today, current)
                 })
 
                 current = moment(current).add('day', 1)
@@ -114,44 +156,69 @@ export default {
 
 <style lang="less">
 
+@tile-size: 50px;
+@color-default: white;
+@color-today: #111;
+@color-hover: #ddd;
+@color-selected: rgb(116, 116, 116);
+@color-outside: #eee;
+@color-disabled: #333;
+
 .calendar {
-    width: 350px;
-}
+    width: 7 * @tile-size;
 
-.kw.headline {
-    font-size: 0.75rem;
-}
+    .wrap {
+        width: 100%;
 
-ul {
-    display: block;
-    margin: 0;
-    padding: 0;
-    width: 350px;
-}
-li {
-    display: inline-block;
-    box-sizing: border-box;
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
+        ul.kw {
+            &.headline {
+                font-size: 0.75rem;
+            }
 
-    cursor: pointer;
+            display: block;
+            margin: 0;
+            padding: 0;
+            width: 100%;
 
-    &:hover {
-        background-color: #ddd;
-    }
+            > li {
+                display: inline-block;
+                box-sizing: border-box;
+                width: @tile-size;
+                height: @tile-size;
+                line-height: @tile-size;
 
-    &[data-today] {
-        background-color: tomato;
-    }
+                cursor: pointer;
 
-    &[data-out] {
-        opacity: 0.75;
-        background-color: #eee;
-    }
+                background-color: @color-default;
 
-    &[data-selected] {
-        background-color: green;
+                &:hover {
+                    background-color: @color-hover;
+                    color: contrast(@color-hover);
+                }
+
+                &[data-today] {
+                    background-color: @color-today;
+                    color: contrast(@color-today);
+                }
+
+                &[data-out] {
+                    opacity: 0.75;
+                    background-color: @color-outside;
+                    color: contrast(@color-outside);
+                }
+
+                &[data-selected] {
+                    background-color: @color-selected;
+                    color: contrast(@color-selected);
+                }
+
+                &[data-disabled] {
+                    background-color: @color-disabled;
+                    color: contrast(@color-disabled);
+                    cursor: not-allowed;
+                }
+            }
+        }
     }
 }
 </style>

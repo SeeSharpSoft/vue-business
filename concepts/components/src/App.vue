@@ -34,4 +34,11 @@ export default {
 .calendar {
   margin: 0 auto;
 }
+
+*:focus {
+  outline-style: dashed;
+  outline-color: darkcyan;
+  outline-offset: -1px;
+  outline-width: 1px;
+}
 </style>
