@@ -4,7 +4,7 @@
             <ul class="kw headline">
                 <li v-for="n in 7" :key="n">{{ getWeekDayName(n) }}</li>
             </ul>
-            <ul class="kw">
+            <ul class="kw" ref="days">
                 <li v-for="(day, index) in daysOfVisibleMonth" 
                     class="day" 
                     :key="index"
@@ -12,11 +12,11 @@
                     :data-today="!!day.today"
                     :data-selected="isSelected(day)"
                     @click="selectDate(day)"
-                    tabindex="0"
-                    @keydown.left="setFocus($event, -1, 0)"
-                    @keydown.right="setFocus($event, 1, 0)"
-                    @keydown.up="setFocus($event, 0, -1)"
-                    @keydown.down="setFocus($event, 0, 1)"
+                    :tabindex="getTabIndex(day)"
+                    @keydown.left="setFocus(index - 1)"
+                    @keydown.right="setFocus(index + 1)"
+                    @keydown.up="setFocus(index - 7)"
+                    @keydown.down="setFocus(index + 7)"
                 >{{ day.moment.date() }}</li>
             </ul>
         </div>
@@ -53,28 +53,31 @@ export default {
             return moment().isoWeekday(day).format('dd')
         },
 
+        getTabIndex(day) {
+            if (!this.selectedDate) {
+                return this._isSameDay(this.today, day.moment) ? "0" : "-1"
+            }
+
+            return this._isSameDay(this.selectedDate, day.moment) ? "0" : "-1"
+        },
+
         selectDate(day) {
             this.selectedDate = day.moment
 
             this.$emit('select', day.moment)
         },
 
-        setFocus(current, x, y) {
-            console.log(current)
-            if (x < 0) {
-
+        setFocus(index) {
+            if (index < 0) {
+                index = 0
             }
 
-            if (x > 0) {
-
+            if (index >= this.$refs.days.children.length) {
+                index = this.$refs.days.children - 1
             }
 
-            if (y < 0) {
-
-            }
-
-            if (y > 0) {
-
+            if (this.$refs.days.children[index]) {
+                this.$refs.days.children[index].focus()
             }
         },
 
