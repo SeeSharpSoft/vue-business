@@ -12,9 +12,9 @@
                 <li v-for="(day, index) in daysOfVisibleMonth" 
                     class="day" 
                     :key="index"
-                    :data-out="!!day.outOfBounds"
-                    :data-today="!!day.today"
-                    :data-selected="isSelected(day)"
+                    :data-out="day.month() !== visibleMonth"
+                    :data-today="day.isSame(today, 'day')"
+                    :data-selected="day.isSame(selectedDate, 'day')"
                     @click="selectDate(day)"
                     :tabindex="getTabIndex(day)"
                     @keydown.left="updateFocus(day, index, -1)"
@@ -22,7 +22,7 @@
                     @keydown.up="updateFocus(day, index, -7)"
                     @keydown.down="updateFocus(day, index, 7)"
                     @keydown.enter="selectDate(day)"
-                >{{ day.moment.date() }}</li>
+                >{{ day.date() }}</li>
             </ul>
         </div>
 	</div>
@@ -38,16 +38,13 @@ export default {
     data() {
         return {
             today: moment(),
-            visibleYear: null,
-            visibleMonth: null,
+            visibleDate: null,
             selectedDate: null
         }
     },
 
     created() {
-        this.visibleYear = this.today.year()
-        this.visibleMonth = this.today.month()
-
+        this.visibleDate = moment([this.today.year(), this.today.month()])
         if (this.selected) {
             this.selectedDate = moment(this.selected)
         }
@@ -67,25 +64,26 @@ export default {
         },
 
         getTabIndex(day) {
-            return this._isSameDay(this.selectedDate || this.today, day.moment) ? "0" : "-1"
+            return day.isSame(this.selectedDate || this.today, 'day') ? "0" : "-1"
         },
 
         selectDate(day) {
-            this.selectedDate = day.moment
-
-            this.$emit('select', day.moment)
+            this.$emit('select', day)
+            this.selectedDate = moment(day)
         },
 
         updateFocus(day, current, delta) {
             if (current % 7 === 0) {
                if (delta === -1) {
-                   return this._setMonth(day, -1)
+                   this.visibleDate = moment(this.visibleDate.subtract(1, 'months'))
+                   return
                }
             }
 
             if ((current - 6) % 7 === 0 && current !== 0) {
                if (delta === 1) {
-                   return this._setMonth(day, 1)
+                   this.visibleDate = moment(this.visibleDate.add(1, 'months'))
+                   return
                }
             }
 
@@ -104,90 +102,28 @@ export default {
             if (this.$refs.days.children[index]) {
                 this.$refs.days.children[index].focus()
             }
-        },
-
-        isSelected(day) {
-            if (!this.selectedDate) {
-                return false
-            }
-
-            return this._isSameDay(this.selectedDate, day.moment)
-        },
-
-        _setMonth(day, delta) {
-            var next = moment(day.moment).add(delta, 'months')
-
-            this.visibleYear = next.year()
-            this.visibleMonth = next.month()
-        },
-
-        _addPlaceholder(aDays, oMoment) {
-            aDays.push({
-                outOfBounds: true,
-                moment: moment(oMoment)
-            })
-        },
-
-        _isSameDay(moment1, moment2) {
-            return moment1.isSame(moment2, 'day')
         }
     },
 
     computed: {
-        firstDayOfVisibleMonth() {
-            return moment([this.visibleYear, this.visibleMonth])
+        visibleYear() {
+            return this.visibleDate.year()
         },
 
-        lastDayOfVisibleMonth() {
-            return moment(this.firstDayOfVisibleMonth).endOf('month')
+        visibleMonth() {
+            return this.visibleDate.month()
         },
 
         daysOfVisibleMonth() {
             var aDays = []
 
-            var current = moment(this.firstDayOfVisibleMonth)
-            var startWeekDay = current.day() === 0 ? 7 : current.day()
+            let lastDayOfVisibleMonth = moment(this.visibleDate).endOf('month'),
+                start = 1 - this.visibleDate.day() % 7 - (this.visibleDate.day() === 0 ? 7 : 0),
+                end = lastDayOfVisibleMonth.date() - lastDayOfVisibleMonth.day() % 7 + (lastDayOfVisibleMonth.day() === 0 ? 0 : 7)
 
-            for (var i = startWeekDay - 1; i > 0; i--) {
-                this._addPlaceholder(aDays, moment(current).subtract(i, 'days'))
+            for (var i = start; i < end; i++) {
+                aDays.push(moment(this.visibleDate).add(i, 'days'))
             }
-
-
-            while (current.isSameOrBefore(this.lastDayOfVisibleMonth, 'day')) {
-                aDays.push({
-                    moment: moment(current),
-                    today: this._isSameDay(this.today, current)
-                })
-
-                current.add(1, 'days')
-            }
-
-            // last change is not pushed
-            current.subtract(1, 'days')
-
-            var endWeekDay = current.day() === 0 ? 7 : current.day()
-
-            for (var i = 1; i <= 7 - endWeekDay; i++) {
-                this._addPlaceholder(aDays, moment(current).add(i, 'days'))
-            }
-
-            // this is the 6th row. when sunday is the first of a month a sixth row is needed.
-            // therefore it is always added to ensure there is no resizing
-            // TODO: Missing edge case: Feb. 2010 month with only 28 days - find better solution here!
-            // TODO: For some reason feb. 2011 only has 27 days
-            // if (aDays.length === 5 * 7) {
-            //     for (var i = 7 - endWeekDay + 1; i <= 7 - endWeekDay + 7; i++) {
-            //         this._addPlaceholder(aDays, moment(current).add('days', i))
-            //     }
-            // }
-
-            // if (this.selectedDate) {
-            //     aDays.forEach((day) => {
-            //         if (day.moment.diff(this.selectedDate, 'hours') < 24 && day.moment.diff(this.selectedDate, 'hours') > 0) {
-            //             day.selected = true
-            //         }
-            //     })
-            // }
 
             return aDays
         }
