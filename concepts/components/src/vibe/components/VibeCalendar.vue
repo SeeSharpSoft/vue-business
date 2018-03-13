@@ -49,7 +49,7 @@ export default {
         this.visibleMonth = this.today.month()
 
         if (this.selected) {
-            this.selectedDate = this.selected;
+            this.selectedDate = moment(this.selected)
         }
     },
 
@@ -67,11 +67,7 @@ export default {
         },
 
         getTabIndex(day) {
-            if (!this.selectedDate) {
-                return this._isSameDay(this.today, day.moment) ? "0" : "-1"
-            }
-
-            return this._isSameDay(this.selectedDate, day.moment) ? "0" : "-1"
+            return this._isSameDay(this.selectedDate || this.today, day.moment) ? "0" : "-1"
         },
 
         selectDate(day) {
@@ -119,7 +115,7 @@ export default {
         },
 
         _setMonth(day, delta) {
-            var next = moment(day.moment).add('month', delta)
+            var next = moment(day.moment).add(delta, 'months')
 
             this.visibleYear = next.year()
             this.visibleMonth = next.month()
@@ -128,16 +124,12 @@ export default {
         _addPlaceholder(aDays, oMoment) {
             aDays.push({
                 outOfBounds: true,
-                moment: oMoment
+                moment: moment(oMoment)
             })
         },
 
         _isSameDay(moment1, moment2) {
-            return (
-                moment1.year() === moment2.year() &&
-                moment1.month() === moment2.month() &&
-                moment1.date() === moment2.date()
-            )
+            return moment1.isSame(moment2, 'day')
         }
     },
 
@@ -157,45 +149,45 @@ export default {
             var startWeekDay = current.day() === 0 ? 7 : current.day()
 
             for (var i = startWeekDay - 1; i > 0; i--) {
-                this._addPlaceholder(aDays, moment(current).subtract('days', i))
+                this._addPlaceholder(aDays, moment(current).subtract(i, 'days'))
             }
 
-            // do not calc days difference. Might lead to problem with summertime
-            while (!this._isSameDay(current, this.lastDayOfVisibleMonth)) {
+
+            while (current.isSameOrBefore(this.lastDayOfVisibleMonth, 'day')) {
                 aDays.push({
-                    moment: current,
+                    moment: moment(current),
                     today: this._isSameDay(this.today, current)
                 })
 
-                current = moment(current).add('day', 1)
+                current.add(1, 'days')
             }
 
             // last change is not pushed
-            current = moment(current).subtract('day', 1)
+            current.subtract(1, 'days')
 
             var endWeekDay = current.day() === 0 ? 7 : current.day()
 
             for (var i = 1; i <= 7 - endWeekDay; i++) {
-                this._addPlaceholder(aDays, moment(current).add('days', i))
+                this._addPlaceholder(aDays, moment(current).add(i, 'days'))
             }
 
             // this is the 6th row. when sunday is the first of a month a sixth row is needed.
             // therefore it is always added to ensure there is no resizing
             // TODO: Missing edge case: Feb. 2010 month with only 28 days - find better solution here!
             // TODO: For some reason feb. 2011 only has 27 days
-            if (aDays.length === 5 * 7) {
-                for (var i = 7 - endWeekDay + 1; i <= 7 - endWeekDay + 7; i++) {
-                    this._addPlaceholder(aDays, moment(current).add('days', i))
-                }
-            }
+            // if (aDays.length === 5 * 7) {
+            //     for (var i = 7 - endWeekDay + 1; i <= 7 - endWeekDay + 7; i++) {
+            //         this._addPlaceholder(aDays, moment(current).add('days', i))
+            //     }
+            // }
 
-            if (this.selectedDate) {
-                aDays.forEach((day) => {
-                    if (day.moment.diff(this.selectedDate, 'hours') < 24 && day.moment.diff(this.selectedDate, 'hours') > 0) {
-                        day.selected = true
-                    }
-                })
-            }
+            // if (this.selectedDate) {
+            //     aDays.forEach((day) => {
+            //         if (day.moment.diff(this.selectedDate, 'hours') < 24 && day.moment.diff(this.selectedDate, 'hours') > 0) {
+            //             day.selected = true
+            //         }
+            //     })
+            // }
 
             return aDays
         }
@@ -215,6 +207,7 @@ export default {
 
 .calendar {
     width: 7 * @tile-size + 100px;
+    height: 7 * @tile-size;
     display: flex;
 
     .info {
