@@ -182,6 +182,7 @@ export default {
             // this is the 6th row. when sunday is the first of a month a sixth row is needed.
             // therefore it is always added to ensure there is no resizing
             // TODO: Missing edge case: Feb. 2010 month with only 28 days - find better solution here!
+            // TODO: For some reason feb. 2011 only has 27 days
             if (aDays.length === 5 * 7) {
                 for (var i = 7 - endWeekDay + 1; i <= 7 - endWeekDay + 7; i++) {
                     this._addPlaceholder(aDays, moment(current).add('days', i))
