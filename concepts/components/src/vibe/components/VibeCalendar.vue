@@ -1,5 +1,9 @@
 <template>
 	<div class="component calendar">
+        <div class="info">  
+            <span :title="getFullMonthName(visibleMonth)">{{ getMonthName(visibleMonth) }}</span>
+            <span>{{ visibleYear }}</span>
+        </div>
         <div class="wrap">
             <ul class="kw headline">
                 <li v-for="n in 7" :key="n">{{ getWeekDayName(n) }}</li>
@@ -13,10 +17,11 @@
                     :data-selected="isSelected(day)"
                     @click="selectDate(day)"
                     :tabindex="getTabIndex(day)"
-                    @keydown.left="setFocus(index - 1)"
-                    @keydown.right="setFocus(index + 1)"
-                    @keydown.up="setFocus(index - 7)"
-                    @keydown.down="setFocus(index + 7)"
+                    @keydown.left="updateFocus(day, index, -1)"
+                    @keydown.right="updateFocus(day, index, 1)"
+                    @keydown.up="updateFocus(day, index, -7)"
+                    @keydown.down="updateFocus(day, index, 7)"
+                    @keydown.enter="selectDate(day)"
                 >{{ day.moment.date() }}</li>
             </ul>
         </div>
@@ -49,6 +54,14 @@ export default {
     },
 
     methods: {
+        getMonthName(month) {
+            return moment().month(month).format('MMM')
+        },
+
+        getFullMonthName(month) {
+            return moment().month(month).format('MMMM')
+        },
+
         getWeekDayName(day) {
             return moment().isoWeekday(day).format('dd')
         },
@@ -65,6 +78,22 @@ export default {
             this.selectedDate = day.moment
 
             this.$emit('select', day.moment)
+        },
+
+        updateFocus(day, current, delta) {
+            if (current % 7 === 0) {
+               if (delta === -1) {
+                   return this._setMonth(day, -1)
+               }
+            }
+
+            if ((current - 6) % 7 === 0 && current !== 0) {
+               if (delta === 1) {
+                   return this._setMonth(day, 1)
+               }
+            }
+
+            this.setFocus(current + delta)
         },
 
         setFocus(index) {
@@ -87,6 +116,13 @@ export default {
             }
 
             return this._isSameDay(this.selectedDate, day.moment)
+        },
+
+        _setMonth(day, delta) {
+            var next = moment(day.moment).add('month', delta)
+
+            this.visibleYear = next.year()
+            this.visibleMonth = next.month()
         },
 
         _addPlaceholder(aDays, oMoment) {
@@ -143,6 +179,14 @@ export default {
                 this._addPlaceholder(aDays, moment(current).add('days', i))
             }
 
+            // this is the 6th row. when sunday is the first of a month a sixth row is needed.
+            // therefore it is always added to ensure there is no resizing
+            if (aDays.length === 5 * 7) {
+                for (var i = 7 - endWeekDay + 1; i <= 7 - endWeekDay + 7; i++) {
+                    this._addPlaceholder(aDays, moment(current).add('days', i))
+                }
+            }
+
             if (this.selectedDate) {
                 aDays.forEach((day) => {
                     if (day.moment.diff(this.selectedDate, 'hours') < 24 && day.moment.diff(this.selectedDate, 'hours') > 0) {
@@ -168,10 +212,24 @@ export default {
 @color-disabled: #333;
 
 .calendar {
-    width: 7 * @tile-size;
+    width: 7 * @tile-size + 100px;
+    display: flex;
+
+    .info {
+        width: 100px;
+        background-color: @color-today;
+        color: contrast(@color-today);
+        padding: 15px 5px;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: space-between;
+        align-items: space-between;
+        font-size: 1.5rem;
+        flex-direction: column;
+    }
 
     .wrap {
-        width: 100%;
+        width: 7 * @tile-size;
 
         ul.kw {
             &.headline {
