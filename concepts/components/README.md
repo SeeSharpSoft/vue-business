@@ -19,3 +19,11 @@
 - code style
 - component structure
 - global LESS variables and helper methods
+
+## First components
+
+- Calendar
+- Avatar
+- Icon
+- Button
+- ...
