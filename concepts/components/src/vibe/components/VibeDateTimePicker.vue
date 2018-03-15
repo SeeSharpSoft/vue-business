@@ -5,11 +5,11 @@
 </template>
 
 <script>
-import VibeComponent from '@/vibe/mixins/VibeComponent'
+import VibeComponent from './VibeComponent'
 
 export default {
-    name: 'VibeIcon',
-    mixins: [VibeComponent],
+    name: 'VibeDateTimePicker',
+    extends: VibeComponent,
     props: [],
     computed: {
 
