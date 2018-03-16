@@ -13,6 +13,7 @@
 - define component specific LESS variables based on global LESS variables, e.g. @vibe-calendar-background: @vibe-primary-background;
 - no scoped LESS/CSS
 - use of mixins for reusable functionality and to unify/define API
+- accessibility is trump (https://www.w3.org/WAI/intro/people-use-web/principles)
 
 ## To Define:
 
