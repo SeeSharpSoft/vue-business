@@ -33,18 +33,27 @@
 </template>
 
 <script>
+
 import VibeComponent from '@/vibe/mixins/VibeComponent'
 import VibeIcon from './VibeIcon'
+import Editable from '../mixins/Editable.js'
 
 export default {
     name: 'VibeCalendar',
-    mixins: [VibeComponent],
+    extends: VibeComponent,
+    mixins: [Editable],
     props: ["selected"],
     data() {
         return {
             today: moment(),
             visibleDate: null,
             selectedDate: null
+        }
+    },
+
+    watch: {
+        selectedDate(oldValue, newValue) {
+            this.onValueChanged('selectedDate', oldValue, newValue)
         }
     },
 
