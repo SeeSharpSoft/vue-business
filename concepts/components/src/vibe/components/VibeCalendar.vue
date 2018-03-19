@@ -164,6 +164,7 @@ export default {
     height: 7 * @tile-size + 100px;
     display: flex;
     flex-direction: column;
+    text-align: center;
 
     .info {
         width: 100%;

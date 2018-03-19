@@ -1,89 +1,42 @@
 <template>
   <div id="app" class="content">
-    <h1>Vibe</h1>
+    <div class="list">
+      <router-link to="/table">Table</router-link>
+      <router-link to="/calendar">Calendar</router-link>
+      <router-link to="/icon">Icon</router-link>
+      <router-link to="/button">Button</router-link>
+    </div>
 
-    <vibe-calendar></vibe-calendar>
-    <vibe-table :items="items" selectionMode="Multi">
-      <vibe-table-column field="firstName" label="FIRST NAME">
-        <template slot="header" slot-scope="column">
-          <p>{{ column }}</p>
-        </template>
-        <template slot="cell" slot-scope="firstName">
-          <span>{{ firstName }}</span>
-        </template>
-      </vibe-table-column>
-      <vibe-table-column field="lastName" label="Last Name">
-      </vibe-table-column>
-      <vibe-table-column field="tag">
-        <template slot-scope="tag">
-          <component :is="getCurrentView(tag)" v-bind="getCurrentProperties(tag)" />
-        </template>
-      </vibe-table-column>
-      <vibe-table-column label="Source">
-        <template slot-scope="item">
-          <div>{{ item }}</div>
-        </template>
-      </vibe-table-column>
-      <vibe-table-column>
-        <template slot="header" slot-scope="column">
-          <div>Label: {{ column }}</div>
-        </template>
-      </vibe-table-column>
-    </vibe-table>
+    <main>
+      <router-view></router-view>
+    </main> 
   </div>
 </template>
 
 <script>
 
-import Button from './vibe/components/VibeButton.vue'
-import Icon from './vibe/components/VibeIcon.vue'
-
 export default {
   name: 'app',
   data () {
     return {
-      items: [
-        {
-          firstName: "Peter",
-          lastName: "Lustig",
-          tag: 42
-        },
-        {
-          firstName: "Frnak",
-          lastName: "Hofnudel",
-          tag: "001-home"
-        }
-      ],
-      locale: "de"
-    }
-  },
-  methods: {
-    getCurrentView(data) {
-      return typeof data === 'string' ? Icon : { template: '<vibe-button>' + data + '</vibe-button>' }
-    },
-    getCurrentProperties(data) {
-      return typeof data === 'string' ? { icon: data, size: '1rem' } : { tooltip: data }
     }
   }
 }
 </script>
 
-<style>
+<style lang="less">
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
-}
-
-.content {
-  text-align: center;
-}
-
-.calendar {
-  margin: 0 auto;
+  min-height: 100vh;
 }
 
 *:focus {
@@ -91,5 +44,47 @@ export default {
   outline-color: darkcyan;
   outline-offset: -1px;
   outline-width: 1px;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+
+  main, .page {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .component {
+    margin: 0 auto;
+  }
+
+  > h1 {
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    flex-shrink: 0;
+  }
+
+  > .list {
+    width: 200px;
+    border-right: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    box-sizing: border-box;
+    height: 100vh;
+
+    > a {
+      padding: 5px 10px;
+    }
+  }
 }
 </style>
