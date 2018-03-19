@@ -15,12 +15,8 @@ export default {
     },
 
     methods: {
-        onValueChanged(property, oldValue, newValue) {
-            this.$emit('valueChanged', createEvent(this, {
-                property: property,
-                oldValue: oldValue,
-                newValue: newValue
-            }))
+        onValueChanged(value) {
+            this.$emit('valueChanged', value)
         },
         vibeEditable() {
             setStyleClass(this.$el, 'vibe-editable-locked', !this.editable)

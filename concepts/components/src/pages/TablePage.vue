@@ -27,6 +27,39 @@
         </template>
       </vibe-table-column>
     </vibe-table>
+    <table>
+      <tr>
+        <td>
+          <vibe-input v-model="newFirstName" />
+        </td>
+        <td>
+          <vibe-input v-model="newLastName" />
+        </td>
+        <td>
+          <vibe-button @click="onAddEntry">Add new entry</vibe-button>
+        </td>
+      </tr>
+    </table>
+    <hr />
+    <vibe-table :items="items.concat([{ dummy: true }])" selectionMode="Single">
+      <vibe-table-column label="First Name">
+        <template slot-scope="item">
+          <vibe-input v-show="!!item.dummy" v-model="item.firstName" />
+          <span v-show="!item.dummy">{{ item.firstName }}</span>
+        </template>
+      </vibe-table-column>
+      <vibe-table-column label="Last Name">
+        <template slot-scope="item">
+          <vibe-input v-show="!!item.dummy" v-model="item.lastName" />
+          <span v-show="!item.dummy">{{ item.lastName }}</span>
+        </template>
+      </vibe-table-column>
+      <vibe-table-column label="Confirm">
+        <template slot-scope="item">
+          <vibe-button v-show="!!item.dummy" @click="onAddEntryInline(item)">Confirm</vibe-button>
+        </template>
+      </vibe-table-column>
+    </vibe-table>
   </div>
 </template>
 
@@ -34,10 +67,14 @@
 
 import Button from './../vibe/components/VibeButton.vue'
 import Icon from './../vibe/components/VibeIcon.vue'
+import VibeInput from './../vibe/components/VibeInput.vue'
 
 export default {
+  components: { VibeInput },
   data () {
     return {
+      newFirstName: '',
+      newLastName: '',
       items: [
         {
           firstName: "Peter",
@@ -54,6 +91,22 @@ export default {
     }
   },
   methods: {
+    onAddEntry() {
+      console.log("onAddEntry")
+      this.items.push({
+        firstName: this.newFirstName,
+        lastName: this.newLastName,
+        tag: null
+      })
+      console.log(this.items)
+    },
+    onAddEntryInline(current) {
+      console.log("onAddEntryInline")
+      if (!current.firstName || !current.lastName) return
+
+      this.$set(current, 'dummy', undefined)
+      this.items.push(current)
+    },
     getCurrentView(data) {
       return typeof data === 'string' ? Icon : { template: '<vibe-button>' + data + '</vibe-button>' }
     },

@@ -74,14 +74,16 @@ export default {
         }
     },
 
-    watchers: {
-        items(oldValue, newValue) {
+    watch: {
+        items(newValue, oldValue) {
+            console.log("table items changed")
             this.tableItems = newValue.map(function(item, index) {
+                let oldTableItem = this._getTableItemByItem(item)
                 return {
                     item: item,
-                    selected: false
+                    selected: oldTableItem && oldTableItem.selected || false
                 }
-            })
+            }.bind(this))
         }
     },
 
@@ -94,6 +96,12 @@ export default {
                 field: node.componentOptions.propsData.field,
                 index: index
             }
+        },
+
+        _getTableItemByItem(item) {
+            return this.tableItems.find(function(tableItem) {
+                return tableItem.item === item
+            })
         },
 
         _getTableRowDomElementAtIndex(index) {
