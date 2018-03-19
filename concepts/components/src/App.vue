@@ -1,6 +1,7 @@
 <template>
   <div id="app" class="content">
     <div class="list">
+      <router-link to="/">Tests</router-link>
       <router-link to="/table">Table</router-link>
       <router-link to="/calendar">Calendar</router-link>
       <router-link to="/icon">Icon</router-link>
@@ -26,16 +27,9 @@ export default {
 
 <style lang="less">
 
-html, body {
-  margin: 0;
-  padding: 0;
-}
+@import "./less/unify";
 
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
   min-height: 100vh;
 }
 
@@ -53,7 +47,12 @@ html, body {
   flex-direction: row;
   flex-wrap: no-wrap;
 
-  main, .page {
+  main {
+    width: ~"calc(100% - 200px)";
+    height: 100%;
+  }
+
+  .page {
     width: 100%;
     height: 100%;
     padding: 20px;

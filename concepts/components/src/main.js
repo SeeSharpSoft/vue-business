@@ -24,13 +24,14 @@ Vue.component('vibe-table-column', VibeTableColumn)
 
 Vue.use(VueRouter)
 
+import TestPage from './pages/TestPage'
 import ButtonPage from './pages/ButtonPage'
 import CalendarPage from './pages/CalendarPage'
 import IconPage from './pages/IconPage'
 import TablePage from './pages/TablePage'
 
 const routes = [
-  { path: '/', component: TablePage },
+  { path: '/', component: TestPage },
   { path: '/table', component: TablePage },
   { path: '/calendar', component: CalendarPage },
   { path: '/icon', component: IconPage },
