@@ -44,19 +44,21 @@
     <vibe-table :items="items.concat([{ dummy: true }])" selectionMode="Single">
       <vibe-table-column label="First Name">
         <template slot-scope="item">
-          <vibe-input v-show="!!item.dummy" v-model="item.firstName" />
-          <span v-show="!item.dummy">{{ item.firstName }}</span>
+          <vibe-input v-show="!!item.dummy || item === editItem" v-model="item.firstName" />
+          <span v-show="!item.dummy && item !== editItem">{{ item.firstName }}</span>
         </template>
       </vibe-table-column>
       <vibe-table-column label="Last Name">
         <template slot-scope="item">
-          <vibe-input v-show="!!item.dummy" v-model="item.lastName" />
-          <span v-show="!item.dummy">{{ item.lastName }}</span>
+          <vibe-input v-show="!!item.dummy || item === editItem" v-model="item.lastName" />
+          <span v-show="!item.dummy && item !== editItem">{{ item.lastName }}</span>
         </template>
       </vibe-table-column>
       <vibe-table-column label="Confirm">
         <template slot-scope="item">
           <vibe-button v-show="!!item.dummy" @click="onAddEntryInline(item)">Confirm</vibe-button>
+          <vibe-button v-show="!item.dummy && item !== editItem" @click="onEditEntryInline(item)">Start Edit</vibe-button>
+          <vibe-button v-show="!item.dummy && item === editItem" @click="onEditEntryInline(item)">End Edit</vibe-button>
         </template>
       </vibe-table-column>
     </vibe-table>
@@ -75,6 +77,7 @@ export default {
     return {
       newFirstName: '',
       newLastName: '',
+      editItem: null,
       items: [
         {
           firstName: "Peter",
@@ -106,6 +109,11 @@ export default {
 
       this.$set(current, 'dummy', undefined)
       this.items.push(current)
+    },
+    onEditEntryInline(current) {
+      console.log(this.editItem)
+      if (this.editItem === current) this.editItem = null
+      else this.editItem = current
     },
     getCurrentView(data) {
       return typeof data === 'string' ? Icon : { template: '<vibe-button>' + data + '</vibe-button>' }
