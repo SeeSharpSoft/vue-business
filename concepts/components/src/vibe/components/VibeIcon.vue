@@ -37,4 +37,9 @@ export default {
 </script>
 
 <style>
+
+.vibe-icon {
+    vertical-align: inherit;
+}
+
 </style>

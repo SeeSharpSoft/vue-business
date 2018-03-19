@@ -34,7 +34,7 @@
 
 <script>
 
-import VibeComponent from '@/vibe/mixins/VibeComponent'
+import VibeComponent from './VibeComponent'
 import VibeIcon from './VibeIcon'
 import Editable from '../mixins/Editable.js'
 

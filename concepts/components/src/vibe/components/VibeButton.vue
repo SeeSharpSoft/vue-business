@@ -1,5 +1,5 @@
 <template>
-    <button class="vibe-button" :title="tooltip" @click="onClick">
+    <button class="vibe-button" :title="tooltip" @click.left.stop="onClick">
         <vibe-icon v-if="iconFirst && icon" :icon="icon" :tooltip="tooltip"/>
         <span class="vibe-text"><slot/></span>
         <vibe-icon v-if="!iconFirst && icon" :icon="icon" :tooltip="tooltip"/>
