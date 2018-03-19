@@ -1,5 +1,5 @@
 <template>
-	<svg class="svg-icon" :style="computedStyle" :lang="language">
+	<svg class="svg-icon vibe-icon" :style="computedStyle" :lang="language">
         <title>{{ title }}</title>
 	    <use :xlink:href="iconId" />
 	</svg>

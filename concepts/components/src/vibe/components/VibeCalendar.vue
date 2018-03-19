@@ -1,8 +1,12 @@
 <template>
-	<div class="component calendar">
+	<div class="component calendar vibe-calendar">
         <div class="info">  
-            <span :title="getFullMonthName(visibleMonth)">{{ getMonthName(visibleMonth) }}</span>
-            <span>{{ visibleYear }}</span>
+            <vibe-icon icon="313-arrow-left"></vibe-icon>
+            <div class="month year">
+                <span :title="getFullMonthName(visibleMonth)">{{ getMonthName(visibleMonth) }}</span>
+                <span>{{ visibleYear }}</span>
+            </div>
+            <vibe-icon icon="309-arrow-right"></vibe-icon>
         </div>
         <div class="wrap">
             <ul class="kw headline">
@@ -30,6 +34,7 @@
 
 <script>
 import VibeComponent from '@/vibe/mixins/VibeComponent'
+import VibeIcon from './VibeIcon'
 
 export default {
     name: 'VibeCalendar',
@@ -127,6 +132,10 @@ export default {
 
             return aDays
         }
+    },
+
+    components: {
+        VibeIcon
     }
 }
 </script>
@@ -141,22 +150,29 @@ export default {
 @color-outside: #eee;
 @color-disabled: #333;
 
-.calendar {
-    width: 7 * @tile-size + 100px;
-    height: 7 * @tile-size;
+.vibe-calendar {
+    width: 7 * @tile-size;
+    height: 7 * @tile-size + 100px;
     display: flex;
+    flex-direction: column;
 
     .info {
-        width: 100px;
+        width: 100%;
         background-color: @color-today;
         color: contrast(@color-today);
-        padding: 15px 5px;
+        padding: 15px;
         box-sizing: border-box;
         display: flex;
         justify-content: space-between;
-        align-items: space-between;
+        align-items: center;
         font-size: 1.5rem;
-        flex-direction: column;
+        flex-direction: row;
+
+        .vibe-icon {
+            height: 1em;
+            width: 1em;
+            fill: contrast(@color-today);
+        }
     }
 
     .wrap {
