@@ -36,7 +36,7 @@ export default {
 *:focus {
   outline-style: dashed;
   outline-color: darkcyan;
-  outline-offset: -1px;
+  outline-offset: 0;
   outline-width: 1px;
 }
 
