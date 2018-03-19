@@ -13,7 +13,8 @@
             <tr v-for="(tableItem, itemIndex) in tableItems" :key="'tr'+itemIndex"
                 :ref="'tr'+itemIndex"
                 :tabindex="selectionMode === 'None' ? null : itemIndex === 0 ? 0 : -1"
-                @click.left.stop="onItemSelected(tableItem, itemIndex)"
+                @click.left.exact.stop="onItemSelected(tableItem, itemIndex)"
+                @click.left.ctrl.exact.stop="onMultiSelect(tableItem, itemIndex)"
                 @keyup.up="onNavUp(itemIndex)"
                 @keyup.down="onNavDown(itemIndex)"
                 @keyup.enter="onItemSelected(tableItem, itemIndex)"
@@ -100,10 +101,11 @@ export default {
         },
 
         onItemSelected(item, index) {
-            this.selectItem(index, !item.selected, true)
+            console.log("onItemSelected")
+            this.selectItem(index, !item.selected, 'Single')
         },
 
-        selectItem(itemIndex, selected, updateOthers) {
+        selectItem(itemIndex, selected, mode) {
             let item = this.tableItems[itemIndex]
 
             if (this.selectionMode === 'None' || item.selected === selected) return
@@ -112,15 +114,22 @@ export default {
             this.$emit('selectionChange', createEvent(this, { item: item.item, selected: item.selected }))
             setStyleClass(this._getTableRowDomElementAtIndex(itemIndex), 'vibe-selected', item.selected)
 
-            if (!updateOthers) return
+            if (!mode || mode === 'Multi') return
 
-            if (this.selectionMode === 'Single' && item.selected) {
+            if (mode === 'Single' && item.selected) {
                 this.tableItems.forEach(function(tableItem, index) {
                     if (itemIndex !== index) {
                         this.selectItem(index, false)
                     }
                 }.bind(this))
             }
+        },
+
+        onMultiSelect(item, index) {
+            console.log("onMultiSelect")
+            if (this.selectionMode !== 'Multi') return
+
+            this.selectItem(index, !item.selected, 'Multi')
         },
 
         onNavUp(index) {

@@ -32,8 +32,8 @@
 
 <script>
 
-import Button from './../components/VibeButton.vue'
-import Icon from './../components/VibeIcon.vue'
+import Button from './../vibe/components/VibeButton.vue'
+import Icon from './../vibe/components/VibeIcon.vue'
 
 export default {
   data () {

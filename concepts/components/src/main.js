@@ -24,10 +24,10 @@ Vue.component('vibe-table-column', VibeTableColumn)
 
 Vue.use(VueRouter)
 
-import ButtonPage from './vibe/pages/ButtonPage'
-import CalendarPage from './vibe/pages/CalendarPage'
-import IconPage from './vibe/pages/IconPage'
-import TablePage from './vibe/pages/TablePage'
+import ButtonPage from './pages/ButtonPage'
+import CalendarPage from './pages/CalendarPage'
+import IconPage from './pages/IconPage'
+import TablePage from './pages/TablePage'
 
 const routes = [
   { path: '/', component: TablePage },
