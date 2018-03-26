@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
 
-var __svg__ = { path: './assets/icons/**/*.svg', name: 'assets/svg/[hash].icons.svg' }
+var __svg__ = { path: './tmp/icons/**/*.svg', name: 'assets/svg/[hash].icons.svg' }
 
 require('webpack-svgstore-plugin/src/helpers/svgxhr')(__svg__)
 

@@ -1,12 +1,12 @@
 <template>
 	<div class="component calendar vibe-calendar">
         <div class="info">  
-            <vibe-icon icon="313-arrow-left"></vibe-icon>
+            <vibe-icon icon="arrow-left"></vibe-icon>
             <div class="month year">
                 <span :title="getFullMonthName(visibleMonth)">{{ getMonthName(visibleMonth) }}</span>
                 <span>{{ visibleYear }}</span>
             </div>
-            <vibe-icon icon="309-arrow-right"></vibe-icon>
+            <vibe-icon icon="arrow-right"></vibe-icon>
         </div>
         <div class="wrap">
             <ul class="kw headline">

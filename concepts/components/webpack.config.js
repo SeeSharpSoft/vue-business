@@ -2,6 +2,8 @@ var path = require('path')
 var webpack = require('webpack')
 var SvgStore = require('webpack-svgstore-plugin')
 
+var VibeConfig = require('./vibe.config.json')
+
 module.exports = {
   entry: './src/main.js',
   output: {
@@ -55,22 +57,22 @@ module.exports = {
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map',
-  plugins: [
-    new SvgStore({
-      svgoOptions: {
-        plugins: [
-          { removeTitle: true }
-        ]
-      },
-      prefix: 'icon-'
-    })
-  ]
+  devtool: '#eval-source-map'
 }
+
+module.exports.plugins = (module.exports.plugins || []).concat([
+  new SvgStore({
+    svgoOptions: {
+      plugins: [
+        { removeTitle: true }
+      ]
+    },
+    prefix: 'icon-'
+  })
+])
 
 if (process.env.NODE_ENV === 'production') {
   module.exports.devtool = '#source-map'
-  // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': {
